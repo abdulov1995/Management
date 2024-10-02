@@ -6,8 +6,8 @@ namespace Management.Roles
     {
         RoleDetailDto GetById(int roleId);
         List<RoleDto> GetAll();
-        void Create(CreateRoleDto createRoleDto);
-        void Update(int id, UpdateRoleDto updatedRoleDto);
+        void Create(RoleCreateDto createRoleDto);
+        void Update(int id, RoleUpdateDto updatedRoleDto);
         public void Delete(int roleId);
     }
 }

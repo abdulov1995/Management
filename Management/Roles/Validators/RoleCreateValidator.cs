@@ -3,11 +3,11 @@ using Management.Roles.Dto;
 
 namespace Management.Roles.Validators
 {
-    public class RoleCreateValidator : AbstractValidator<CreateRoleDto>
+    public class RoleCreateValidator : AbstractValidator<RoleCreateDto>
     {
         public RoleCreateValidator()
         {
-            RuleFor(t => t.Name).NotEmpty().WithMessage("Name is required!");
+            RuleFor(r => r.Name).NotEmpty().WithMessage("Name is required!");
         }
     }
 

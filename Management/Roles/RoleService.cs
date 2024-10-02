@@ -30,7 +30,7 @@ namespace Management.Roles
             return _mapper.Map<List<RoleDto>>(roles);
         }
 
-        public void Create(CreateRoleDto createRoleDto)
+        public void Create(RoleCreateDto createRoleDto)
         {
             var role = _mapper.Map<Role>(createRoleDto);
             _context.Roles.Add(role);
@@ -55,7 +55,7 @@ namespace Management.Roles
             _context.SaveChanges();
         }
 
-        public void Update(int id, UpdateRoleDto updatedRoleDto)
+        public void Update(int id, RoleUpdateDto updatedRoleDto)
         {
             var rolesIds = _context.Roles.Include(u => u.UserRoles).ThenInclude(r => r.User).Where(r => r.Id == id).ToList();
 

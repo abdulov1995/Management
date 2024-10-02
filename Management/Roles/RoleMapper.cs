@@ -9,8 +9,8 @@ namespace Management.Roles
         public RoleMapper()
         {
             CreateMap<Role, RoleDto>();
-            CreateMap<CreateRoleDto, Role>();
-            CreateMap<UpdateRoleDto, Role>();
+            CreateMap<RoleCreateDto, Role>();
+            CreateMap<RoleUpdateDto, Role>();
             CreateMap<Role, RoleDetailDto>()
                 .ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.UserRoles.Select(x => x.User)));
         }

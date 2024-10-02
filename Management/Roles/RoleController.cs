@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Management.Roles
 {
-
-
     [ApiController]
     [Route("api/roles")]
     public class RoleController : Controller
@@ -29,7 +27,7 @@ namespace Management.Roles
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody]CreateRoleDto role)
+        public IActionResult Create([FromBody]RoleCreateDto role)
         {
             if (!ModelState.IsValid)
             {
@@ -40,7 +38,7 @@ namespace Management.Roles
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromBody] int roleId, UpdateRoleDto updatedRoleDto)
+        public IActionResult Update(int roleId, [FromBody] RoleUpdateDto updatedRoleDto)
         {
             if (!ModelState.IsValid)
             {

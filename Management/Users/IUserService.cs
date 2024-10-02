@@ -6,8 +6,8 @@ namespace Management.Users
     {
         UserDetailDto GetById(int userId);
         List<UserDto> GetAll();
-        void Create(CreateUserDto createUserDto);
-        void Update(int id, UpdateUserDto updatedUserDto);
+        void Create(UserCreateDto createUserDto);
+        void Update(int id, UserUpdateDto updatedUserDto);
         void Delete(int userId);
     }
 }

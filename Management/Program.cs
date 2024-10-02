@@ -17,9 +17,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddAutoMapper(typeof(UserMapper).Assembly);
 builder.Services.AddControllers().AddFluentValidation(fv =>
-                fv.RegisterValidatorsFromAssemblyContaining<CreateUserDto>());
-builder.Services.AddControllers().AddFluentValidation(fv =>
-                fv.RegisterValidatorsFromAssemblyContaining<CreateRoleDto>());
+               { fv.RegisterValidatorsFromAssemblyContaining<UserCreateDto>();
+                 fv.RegisterValidatorsFromAssemblyContaining<RoleCreateDto>();
+               });
+
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();

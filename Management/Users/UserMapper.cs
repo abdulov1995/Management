@@ -11,8 +11,8 @@ namespace Management.Users
         public UserMapper()
         {
             CreateMap<User, UserDto>();
-            CreateMap<CreateUserDto, User>();
-            CreateMap<UpdateRoleDto, User>();
+            CreateMap<UserCreateDto, User>();
+            CreateMap<RoleUpdateDto, User>();
             CreateMap<User, UserDetailDto>()
                 .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.UserRoles.Select(x => x.Role)));
         }
