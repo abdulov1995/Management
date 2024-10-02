@@ -91,6 +91,10 @@ namespace Management.Roles
             var role = _context.Roles
                 .Include(r => r.UserRoles)
                 .FirstOrDefault(r => r.Id == roleId);
+            if (role == null)
+            {
+                throw new InvalidOperationException($"Role with ID {roleId} not found.");
+            }
             role.IsDeleted = true;
 
             if (role.UserRoles != null)
