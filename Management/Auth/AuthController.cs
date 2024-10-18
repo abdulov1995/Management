@@ -14,7 +14,7 @@ using System.Text;
 namespace Management.Auth
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -75,6 +75,8 @@ namespace Management.Auth
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Name, user.FirstName)
                     }),
+                Issuer= _configuration["Jwt:Issuer"],
+                Audience= _configuration["Jwt:Audience"],
                 Expires = DateTime.UtcNow.AddMinutes(60),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
