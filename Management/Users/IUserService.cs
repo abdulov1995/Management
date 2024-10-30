@@ -1,4 +1,6 @@
-﻿using Management.Users.Dto;
+﻿using Management.Auth.Dto;
+using Management.Users.Dto;
+using Management.Users.Model;
 
 namespace Management.Users
 {
@@ -6,7 +8,7 @@ namespace Management.Users
     {
         UserDetailDto GetById(int userId);
         List<UserDto> GetAll();
-        void Create(UserCreateDto createUserDto);
+        User Create(UserCreateDto createUserDto);
         void Update(int id, UserUpdateDto updatedUserDto);
         void Delete(int userId);
     }

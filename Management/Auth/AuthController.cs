@@ -1,4 +1,5 @@
 ﻿using Management.Auth.Dto;
+using Management.Extentions.TokenHelper;
 using Management.Users.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,70 +20,36 @@ namespace Management.Auth
     {
         private readonly IAuthService _authService;
         private readonly AppDbContext _context;
-        private readonly IConfiguration _configuration;
-
-        public AuthController(IAuthService authService, AppDbContext context, IConfiguration configuration)
+        private readonly TokenHelper _tokenHelper;
+        public AuthController(IAuthService authService, AppDbContext context, TokenHelper tokenHelper)
         {
             _authService = authService;
-            _context=context;
-            _configuration = configuration;
+            _context = context;
+            _tokenHelper = tokenHelper;
         }
 
         [HttpPost("signup")]
         public IActionResult SignUp([FromBody] SignUpRequestDto signUpRequest)
         {
-            var signUpResult = _authService.SignUp(signUpRequest);
-
-            if (signUpResult.Contains("already in use"))
-            {
-                return Conflict(signUpResult);
-            }
-            var user = _context.Users.FirstOrDefault(u => u.Email == signUpRequest.Email);
-            var token = GenerateJwtToken(user);
+            var user = _authService.SignUp(signUpRequest);
+            var token = _tokenHelper.GenerateJwtToken(user);
             var response = new SignUpResponseDto
             {
                 AccessToken = token
             };
-
             return Ok(response);
         }
-       
+
         [HttpPost("signin")]
-        [Authorize]
         public IActionResult SignIn([FromBody] SignInRequestDto signInRequest)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == signInRequest.Email||u.UserName==signInRequest.Username);
-            if (user == null )
-            {
-                return Unauthorized(new { message = "Invalid credentials." });
-            }
-            var token = GenerateJwtToken(user);
+            var user = _authService.SignIn(signInRequest);
+            var token = _tokenHelper.GenerateJwtToken(user);
             var response = new SignInResponseDto
             {
                 AccessToken = token,
             };
             return Ok(response);
         }
-
-        private string GenerateJwtToken(User user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(ClaimTypes.Name, user.FirstName)
-                    }),
-                Issuer= _configuration["Jwt:Issuer"],
-                Audience= _configuration["Jwt:Audience"],
-                Expires = DateTime.UtcNow.AddMinutes(60),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
-
     }
 }

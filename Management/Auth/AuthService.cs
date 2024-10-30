@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Management.Auth.Dto;
 using Management.Extentions.Helpers;
+using Management.Users;
+using Management.Users.Dto;
 using Management.Users.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -17,43 +19,53 @@ namespace Management.Auth
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public AuthService(AppDbContext context, IMapper mapper)
+        public AuthService(AppDbContext context, IMapper mapper, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
+            _userService = userService;
         }
-        public string SignUp(SignUpRequestDto signUpRequest)
+        public User SignUp(SignUpRequestDto signUpRequest)
         {
             var existingUsername = _context.Users.FirstOrDefault(u => u.UserName == signUpRequest.Username);
             var existingEmail = _context.Users.FirstOrDefault(u => u.Email == signUpRequest.Email);
 
             if (existingEmail != null)
             {
-                return "Email is already in use.";
+                throw new ArgumentException("Email is already in use.");
             }
             else if (existingUsername != null)
             {
-                return "Username is already in use.";
+                throw new ArgumentException("Username is already in use.");
             }
 
-            var newUser = _mapper.Map<User>(signUpRequest);
-            newUser.Password = PasswordHelper.CreateMd5(signUpRequest.Password);
+            var newUser = new UserCreateDto
+            {
+                FirstName = signUpRequest.Username,
+                Email = signUpRequest.Email,
+                Password = signUpRequest.Password,
+            };
 
-            _context.Users.Add(newUser);
-            _context.SaveChanges();
-            return "SignUp successfull!!";
+            return _userService.Create(newUser);
         }
 
-        public string SignIn(SignInRequestDto signInRequest)
+        public User SignIn(SignInRequestDto signInRequest)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email == signInRequest.Email || u.UserName == signInRequest.Username);
-            var hashPassword=PasswordHelper.CreateMd5(signInRequest.Password);
-            if (user == null && user.Password == hashPassword)
+
+            if (user == null)
             {
-                return user.ToString();
+                throw new ArgumentException("User not found");
             }
-            return null;
+
+            var hashPassword = PasswordHelper.CreateMd5(signInRequest.Password);
+            if (user.Password != hashPassword)
+            {
+                throw new ArgumentException("Invalid credentials.");
+            }
+            return user;
         }
     }
 }

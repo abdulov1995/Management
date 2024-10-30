@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using Management.Auth;
+using Management.Extentions.TokenHelper;
 using Management.Roles;
 using Management.Roles.Dto;
 using Management.Users;
@@ -65,7 +66,7 @@ builder.Services.AddControllers().AddFluentValidation(fv =>
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Services.AddAuthorization();
-
+builder.Services.AddScoped<TokenHelper>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

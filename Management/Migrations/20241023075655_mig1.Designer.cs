@@ -11,8 +11,8 @@ using StudentWebApi;
 namespace Management.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241017132742_mg1")]
-    partial class mg1
+    [Migration("20241023075655_mig1")]
+    partial class mig1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,20 @@ namespace Management.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDeleted = false,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsDeleted = false,
+                            Name = "User"
+                        });
                 });
 
             modelBuilder.Entity("Management.Roles.Model.UserRole", b =>
@@ -68,6 +82,15 @@ namespace Management.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDeleted = false,
+                            RoleId = 1,
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("Management.Users.Model.User", b =>
@@ -107,6 +130,19 @@ namespace Management.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Age = 29,
+                            Email = "kamal@mail.ru",
+                            FirstName = "Kamal",
+                            IsDeleted = false,
+                            LastName = "Abdulov",
+                            Password = "4A99B9194B0B7D8349A1C786A65D2E7D",
+                            UserName = "neo"
+                        });
                 });
 
             modelBuilder.Entity("Management.Roles.Model.UserRole", b =>

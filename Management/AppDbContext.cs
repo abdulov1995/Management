@@ -1,4 +1,6 @@
-﻿using Management.Roles.Model;
+﻿using Management.Auth.Dto;
+using Management.Extentions.Helpers;
+using Management.Roles.Model;
 using Management.Users.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -13,12 +15,33 @@ namespace StudentWebApi
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
-       
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Role>().HasData(
+               new Role { Id = 1, Name = "Admin" },
+               new Role { Id = 2, Name = "User" });
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    FirstName = "Kamal",
+                    LastName = "Abdulov",
+                    Email = "kamal@mail.ru",
+                    Age = 29,
+                    UserName = "neo",
+                    Password = PasswordHelper.CreateMd5("berba123"),
+                    IsDeleted = false,
+                    
+                });
+           
+
+            modelBuilder.Entity<UserRole>().HasData(
+                new UserRole { Id = 1, UserId = 1, RoleId = 1 }
+            );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

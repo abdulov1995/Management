@@ -3,10 +3,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Management.Migrations
 {
     /// <inheritdoc />
-    public partial class mg1 : Migration
+    public partial class mig1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -70,6 +72,25 @@ namespace Management.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "IsDeleted", "Name" },
+                values: new object[,]
+                {
+                    { 1, false, "Admin" },
+                    { 2, false, "User" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Age", "Email", "FirstName", "IsDeleted", "LastName", "Password", "UserName" },
+                values: new object[] { 1, 29, "kamal@mail.ru", "Kamal", false, "Abdulov", "4A99B9194B0B7D8349A1C786A65D2E7D", "neo" });
+
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "Id", "IsDeleted", "RoleId", "UserId" },
+                values: new object[] { 1, false, 1, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",

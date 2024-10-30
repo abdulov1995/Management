@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Management.Auth.Dto;
 using Management.Roles.Model;
 using Management.Users.Dto;
 using Management.Users.Model;
@@ -30,7 +31,7 @@ namespace Management.Users
             return _mapper.Map<List<UserDto>>(users);
         }
 
-        public void Create(UserCreateDto createUserDto)
+        public User Create(UserCreateDto createUserDto)
         {
             var user = _mapper.Map<User>(createUserDto);
             _context.Users.Add(user);
@@ -54,6 +55,7 @@ namespace Management.Users
 
             _context.UserRoles.AddRange(userRoles);
             _context.SaveChanges();
+            return user;
         }
 
         public void Update(int id, UserUpdateDto updatedUserDto)

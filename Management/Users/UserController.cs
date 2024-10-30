@@ -1,10 +1,13 @@
-﻿using Management.Users.Dto;
+﻿using Management.Auth.Dto;
+using Management.Users.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Management.Users
 {
     [ApiController]
     [Route("api/users")]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly IUserService _userService;
