@@ -7,6 +7,7 @@ using Management.Users.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StudentWebApi;
 using System.IdentityModel.Tokens.Jwt;
@@ -53,7 +54,7 @@ namespace Management.Auth
 
         public User SignIn(SignInRequestDto signInRequest)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == signInRequest.Email || u.UserName == signInRequest.Username);
+            var user = _context.Users.Include(u=>u.Role).FirstOrDefault(u => u.Email == signInRequest.Email || u.UserName == signInRequest.Username);
 
             if (user == null)
             {

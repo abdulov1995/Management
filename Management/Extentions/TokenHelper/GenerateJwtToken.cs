@@ -23,11 +23,6 @@ namespace Management.Extentions.TokenHelper
         }
         public  string GenerateJwtToken(User user)
         {
-            var roles = _context.UserRoles
-                  .Include(ur => ur.Role)
-                  .Where(ur => ur.UserId == user.Id)
-                  .Select(ur => ur.Role.Name)
-                  .ToList();
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -35,7 +30,7 @@ namespace Management.Extentions.TokenHelper
                 Subject = new ClaimsIdentity(new[]
                 {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(ClaimTypes.Name,user.UserRoles.ToString())
+                        new Claim(ClaimTypes.Name,user.Role.Name)
                     }),
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],

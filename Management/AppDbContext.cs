@@ -35,13 +35,8 @@ namespace StudentWebApi
                     UserName = "neo",
                     Password = PasswordHelper.CreateMd5("berba123"),
                     IsDeleted = false,
-                    
+                    RoleId=1
                 });
-           
-
-            modelBuilder.Entity<UserRole>().HasData(
-                new UserRole { Id = 1, UserId = 1, RoleId = 1 }
-            );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
