@@ -42,7 +42,7 @@ namespace StudentWebApi
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=12345;Database=Managament");
+                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;UserName=postgres;Password=12345;Database=Managament");
             }
         }
 

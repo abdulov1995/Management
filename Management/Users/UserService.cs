@@ -37,23 +37,23 @@ namespace Management.Users
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            var userRoles = new List<UserRole>();
-            foreach (var roleId in createUserDto.RoleIds)
-            {
-                var role = _context.Roles.FirstOrDefault(r => r.Id == roleId);
-                if (role == null)
-                {
-                    throw new ArgumentException($"Role with ID {roleId} does not exist.");
-                }
-                var userRole = new UserRole
-                {
-                    RoleId = roleId,
-                    UserId = user.Id
-                };
-                userRoles.Add(userRole);
-            }
+            //var userRoles = new List<UserRole>();
+            //foreach (var roleId in createUserDto.RoleIds)
+            //{
+            //    var role = _context.Roles.FirstOrDefault(r => r.Id == roleId);
+            //    if (role == null)
+            //    {
+            //        throw new ArgumentException($"Role with ID {roleId} does not exist.");
+            //    }
+            //    var userRole = new UserRole
+            //    {
+            //        RoleId = roleId,
+            //        UserId = user.Id
+            //    };
+            //    userRoles.Add(userRole);
+            //}
 
-            _context.UserRoles.AddRange(userRoles);
+            //_context.UserRoles.AddRange(userRoles);
             _context.SaveChanges();
             return user;
         }
@@ -71,19 +71,19 @@ namespace Management.Users
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            var userRoles = new List<UserRole>();
-            foreach (var roleId in updatedUserDto.RoleIds)
-            {
-                var role = _context.Roles.FirstOrDefault(r => r.Id == roleId);
-                var userRole = new UserRole
-                {
-                    RoleId = roleId,
-                    UserId = user.Id
-                };
-                userRoles.Add(userRole);
-            }
+            //var userRoles = new List<UserRole>();
+            //foreach (var roleId in updatedUserDto.RoleIds)
+            //{
+            //    var role = _context.Roles.FirstOrDefault(r => r.Id == roleId);
+            //    var userRole = new UserRole
+            //    {
+            //        RoleId = roleId,
+            //        UserId = user.Id
+            //    };
+            //    userRoles.Add(userRole);
+            //}
 
-            _context.UserRoles.AddRange(userRoles);
+            //_context.UserRoles.AddRange(userRoles);
             _context.SaveChanges();
         }
 

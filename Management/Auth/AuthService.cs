@@ -30,23 +30,26 @@ namespace Management.Auth
         }
         public User SignUp(SignUpRequestDto signUpRequest)
         {
-            var existingUsername = _context.Users.FirstOrDefault(u => u.UserName == signUpRequest.Username);
+            var existingUserName = _context.Users.FirstOrDefault(u => u.UserName == signUpRequest.UserName);
             var existingEmail = _context.Users.FirstOrDefault(u => u.Email == signUpRequest.Email);
 
             if (existingEmail != null)
             {
                 throw new ArgumentException("Email is already in use.");
             }
-            else if (existingUsername != null)
+            else if (existingUserName != null)
             {
-                throw new ArgumentException("Username is already in use.");
+                throw new ArgumentException("UserName is already in use.");
             }
 
             var newUser = new UserCreateDto
             {
-                FirstName = signUpRequest.Username,
+                UserName = signUpRequest.UserName,
                 Email = signUpRequest.Email,
                 Password = signUpRequest.Password,
+                FirstName=signUpRequest.FirstName,
+                LastName=signUpRequest.LastName,
+                RoleId = 2
             };
 
             return _userService.Create(newUser);
@@ -54,7 +57,7 @@ namespace Management.Auth
 
         public User SignIn(SignInRequestDto signInRequest)
         {
-            var user = _context.Users.Include(u=>u.Role).FirstOrDefault(u => u.Email == signInRequest.Email || u.UserName == signInRequest.Username);
+            var user = _context.Users.Include(u=>u.Role).FirstOrDefault(u => u.Email == signInRequest.Email || u.UserName == signInRequest.UserName);
 
             if (user == null)
             {

@@ -11,7 +11,7 @@ using StudentWebApi;
 namespace Management.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241023075655_mig1")]
+    [Migration("20241109112928_mig1")]
     partial class mig1
     {
         /// <inheritdoc />
@@ -82,15 +82,6 @@ namespace Management.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsDeleted = false,
-                            RoleId = 1,
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("Management.Users.Model.User", b =>
@@ -116,18 +107,22 @@ namespace Management.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
 
@@ -141,6 +136,7 @@ namespace Management.Migrations
                             IsDeleted = false,
                             LastName = "Abdulov",
                             Password = "4A99B9194B0B7D8349A1C786A65D2E7D",
+                            RoleId = 1,
                             UserName = "neo"
                         });
                 });
@@ -154,7 +150,7 @@ namespace Management.Migrations
                         .IsRequired();
 
                     b.HasOne("Management.Users.Model.User", "User")
-                        .WithMany("UserRoles")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -164,12 +160,18 @@ namespace Management.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Management.Roles.Model.Role", b =>
+            modelBuilder.Entity("Management.Users.Model.User", b =>
                 {
-                    b.Navigation("UserRoles");
+                    b.HasOne("Management.Roles.Model.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Management.Users.Model.User", b =>
+            modelBuilder.Entity("Management.Roles.Model.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });

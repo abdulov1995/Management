@@ -34,16 +34,23 @@ namespace Management.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: true),
                     Age = table.Column<int>(type: "integer", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     UserName = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,13 +91,8 @@ namespace Management.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Age", "Email", "FirstName", "IsDeleted", "LastName", "Password", "UserName" },
-                values: new object[] { 1, 29, "kamal@mail.ru", "Kamal", false, "Abdulov", "4A99B9194B0B7D8349A1C786A65D2E7D", "neo" });
-
-            migrationBuilder.InsertData(
-                table: "UserRoles",
-                columns: new[] { "Id", "IsDeleted", "RoleId", "UserId" },
-                values: new object[] { 1, false, 1, 1 });
+                columns: new[] { "Id", "Age", "Email", "FirstName", "IsDeleted", "LastName", "Password", "RoleId", "UserName" },
+                values: new object[] { 1, 29, "kamal@mail.ru", "Kamal", false, "Abdulov", "4A99B9194B0B7D8349A1C786A65D2E7D", 1, "neo" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
@@ -101,6 +103,11 @@ namespace Management.Migrations
                 name: "IX_UserRoles_UserId",
                 table: "UserRoles",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_RoleId",
+                table: "Users",
+                column: "RoleId");
         }
 
         /// <inheritdoc />
@@ -110,10 +117,10 @@ namespace Management.Migrations
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Roles");
         }
     }
 }
