@@ -41,14 +41,15 @@ namespace Management.Auth
             {
                 throw new ArgumentException("UserName is already in use.");
             }
-
+            var role = _context.Roles.FirstOrDefault(r => r.Id == 2);
             var newUser = new UserCreateDto
             {
                 UserName = signUpRequest.UserName,
                 Email = signUpRequest.Email,
-                Password = signUpRequest.Password,
+                Password = PasswordHelper.CreateMd5(signUpRequest.Password),
                 FirstName=signUpRequest.FirstName,
                 LastName=signUpRequest.LastName,
+                Age=signUpRequest.Age,
                 RoleId = 2
             };
 

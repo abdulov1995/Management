@@ -11,7 +11,7 @@ using StudentWebApi;
 namespace Management.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241109112928_mig1")]
+    [Migration("20241111115616_mig1")]
     partial class mig1
     {
         /// <inheritdoc />

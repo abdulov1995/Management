@@ -1,5 +1,7 @@
 ﻿using Management.Auth.Dto;
+using Management.Roles.Model;
 using Management.Users.Dto;
+using Management.Users.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +9,7 @@ namespace Management.Users
 {
     [ApiController]
     [Route("api/users")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles="Admin")]
     public class UsersController : Controller
     {
         private readonly IUserService _userService;
