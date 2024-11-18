@@ -13,7 +13,7 @@ namespace Management.Users
         {
             CreateMap<User, UserDto>();
             CreateMap<UserCreateDto, User>()
-           .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName));
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName));
             CreateMap<RoleUpdateDto, User>();
             CreateMap<SignUpRequestDto, User>();
             CreateMap<SignInRequestDto, User>();

@@ -33,7 +33,7 @@ namespace StudentWebApi
                     Email = "kamal@mail.ru",
                     Age = 29,
                     UserName = "neo",
-                    Password = PasswordHelper.CreateMd5("berba123"),
+                    Password = PasswordHelper.CreateMd5("Berbatov123@"),
                     IsDeleted = false,
                     RoleId=1
                 });

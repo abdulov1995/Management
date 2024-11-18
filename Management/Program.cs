@@ -1,5 +1,8 @@
+using FluentValidation;
 using FluentValidation.AspNetCore;
+using FluentValidation.Validators;
 using Management.Auth;
+using Management.Auth.Validators;
 using Management.Extentions.TokenHelper;
 using Management.Roles;
 using Management.Roles.Dto;
@@ -54,6 +57,12 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddAutoMapper(typeof(UserMapper).Assembly);
 builder.Services.AddAutoMapper(typeof(RoleMapper).Assembly);
+builder.Services.AddValidatorsFromAssemblyContaining<EmailValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<PasswordValidator>();
+//builder.Services.AddControllers().AddFluentValidation(fv =>
+//                fv.RegisterValidatorsFromAssemblyContaining<EmailValidator>());
+//builder.Services.AddControllers().AddFluentValidation(fv =>
+//                fv.RegisterValidatorsFromAssemblyContaining<PasswordValidator>());
 builder.Services.AddControllers().AddFluentValidation(fv =>
                {
                    fv.RegisterValidatorsFromAssemblyContaining<UserCreateDto>();

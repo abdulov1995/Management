@@ -30,7 +30,7 @@ namespace Management.Extentions.TokenHelper
                 Subject = new ClaimsIdentity(new[]
                 {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(ClaimTypes.Name, user.Role.Name)
+                        new Claim(ClaimTypes.Role, user.Role.Name)
                     }),
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
