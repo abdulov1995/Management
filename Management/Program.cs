@@ -2,6 +2,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using FluentValidation.Validators;
 using Management.Auth;
+using Management.Auth.Dto;
 using Management.Auth.Validators;
 using Management.Extentions.TokenHelper;
 using Management.Roles;
@@ -20,7 +21,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers().AddFluentValidation();
+//builder.Services.AddTransient<IValidator<SignUpRequestDto>, SignUpRequestValidator>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -57,14 +60,9 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddAutoMapper(typeof(UserMapper).Assembly);
 builder.Services.AddAutoMapper(typeof(RoleMapper).Assembly);
-builder.Services.AddValidatorsFromAssemblyContaining<EmailValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<PasswordValidator>();
-//builder.Services.AddControllers().AddFluentValidation(fv =>
-//                fv.RegisterValidatorsFromAssemblyContaining<EmailValidator>());
-//builder.Services.AddControllers().AddFluentValidation(fv =>
-//                fv.RegisterValidatorsFromAssemblyContaining<PasswordValidator>());
 builder.Services.AddControllers().AddFluentValidation(fv =>
-               {
+               { 
+                   fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestDto>();
                    fv.RegisterValidatorsFromAssemblyContaining<UserCreateDto>();
                    fv.RegisterValidatorsFromAssemblyContaining<RoleCreateDto>();
                    fv.RegisterValidatorsFromAssemblyContaining<UserUpdateDto>();

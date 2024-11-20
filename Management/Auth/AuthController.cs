@@ -16,6 +16,7 @@ using System.Text;
 
 namespace Management.Auth
 {
+
     [ApiController]
     [Route("api/auth")]
     public class AuthController : ControllerBase
@@ -23,23 +24,17 @@ namespace Management.Auth
         private readonly IAuthService _authService;
         private readonly AppDbContext _context;
         private readonly TokenHelper _tokenHelper;
-        private readonly IValidator _validator;
-        public AuthController(IAuthService authService, AppDbContext context, TokenHelper tokenHelper,IValidator validator)
+        public AuthController(IAuthService authService, AppDbContext context, TokenHelper tokenHelper)
         {
             _authService = authService;
             _context = context;
             _tokenHelper = tokenHelper;
-            _validator = validator;
         }
 
         [HttpPost("signup")]
         public IActionResult SignUp([FromBody] SignUpRequestDto signUpRequest)
         {
-            var validationResult = _validator.Validate((IValidationContext)signUpRequest);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
+            
             var user = _authService.SignUp(signUpRequest);
             var token = _tokenHelper.GenerateJwtToken(user);
             var response = new SignUpResponseDto

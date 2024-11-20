@@ -9,7 +9,7 @@ namespace Management.Users
 {
     [ApiController]
     [Route("api/users")]
-    [Authorize(Roles="Admin")]
+   // [Authorize(Roles="Admin")]
     public class UsersController : Controller
     {
         private readonly IUserService _userService;
@@ -34,10 +34,7 @@ namespace Management.Users
         [HttpPost]
         public IActionResult Create([FromBody] UserCreateDto user)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+           
             _userService.Create(user);
             return Ok();
         }
@@ -45,10 +42,7 @@ namespace Management.Users
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UserUpdateDto updatedUser)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+           
             _userService.Update(id, updatedUser);
             return Ok();
         }
