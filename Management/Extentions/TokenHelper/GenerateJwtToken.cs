@@ -15,11 +15,13 @@ namespace Management.Extentions.TokenHelper
     {
         private readonly IConfiguration _configuration;
         private readonly AppDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TokenHelper(IConfiguration configuration,AppDbContext context)
+        public TokenHelper(IConfiguration configuration,AppDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
         public  string GenerateJwtToken(User user)
         {
@@ -39,6 +41,11 @@ namespace Management.Extentions.TokenHelper
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+        public int GetUserIdFromContext()
+        {
+            var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return userIdClaim != null ? int.Parse(userIdClaim) : 0;
         }
     }
 }

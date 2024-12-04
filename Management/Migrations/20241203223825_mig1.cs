@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -39,6 +40,10 @@ namespace Management.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     UserName = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: false),
+                    UpdatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     RoleId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -91,8 +96,8 @@ namespace Management.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Age", "Email", "FirstName", "IsDeleted", "LastName", "Password", "RoleId", "UserName" },
-                values: new object[] { 1, 29, "kamal@mail.ru", "Kamal", false, "Abdulov", "4A99B9194B0B7D8349A1C786A65D2E7D", 1, "neo" });
+                columns: new[] { "Id", "Age", "CreatedBy", "CreatedOn", "Email", "FirstName", "IsDeleted", "LastName", "Password", "RoleId", "UpdatedBy", "UpdatedOn", "UserName" },
+                values: new object[] { 1, 29, "1", new DateTime(2024, 12, 3, 22, 38, 24, 842, DateTimeKind.Utc).AddTicks(3798), "kamal@mail.ru", "Kamal", false, "Abdulov", "A0931047E9DA549847FC8EAADD89FE16", 1, "1", new DateTime(2024, 12, 3, 22, 38, 24, 842, DateTimeKind.Utc).AddTicks(3799), "neo" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
@@ -107,7 +112,8 @@ namespace Management.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
                 table: "Users",
-                column: "RoleId");
+                column: "RoleId",
+                unique: true);
         }
 
         /// <inheritdoc />

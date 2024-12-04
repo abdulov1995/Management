@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Management.Auth.Dto;
 using Management.Extentions.Helpers;
+using Management.Extentions.TokenHelper;
 using Management.Users;
 using Management.Users.Dto;
 using Management.Users.Model;
@@ -14,13 +15,16 @@ namespace Management.Auth
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly TokenHelper _tokenHelper;
 
 
-        public AuthService(AppDbContext context, IMapper mapper, IUserService userService)
+        public AuthService(AppDbContext context, IMapper mapper, IUserService userService, TokenHelper tokenHelper)
         {
             _context = context;
             _mapper = mapper;
             _userService = userService;
+            _tokenHelper = tokenHelper;
+
         }
         public User SignUp(SignUpRequestDto signUpRequest)
         {
@@ -43,7 +47,9 @@ namespace Management.Auth
                 Password = PasswordHelper.CreateMd5(signUpRequest.Password),
                 FirstName = signUpRequest.FirstName,
                 LastName = signUpRequest.LastName,
+                //CreatedBy=_tokenHelper.GetUserIdFromContext(_tokenHelper.GenerateJwtToken(signUpRequest))
                 Age = signUpRequest.Age,
+               
                 RoleId = 2
             };
 

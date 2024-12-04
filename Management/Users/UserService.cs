@@ -4,8 +4,12 @@ using Management.Roles.Model;
 using Management.Users.Dto;
 using Management.Users.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using StudentWebApi;
 using System.Text.RegularExpressions;
+using System.Security.Claims;
+using Management.Extentions.TokenHelper;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Management.Users
 {
@@ -13,11 +17,14 @@ namespace Management.Users
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly TokenHelper _tokenHelper;
 
-        public UserService(AppDbContext context, IMapper mapper)
+
+        public UserService(AppDbContext context, IMapper mapper, TokenHelper tokenHelper)
         {
             _context = context;
             _mapper = mapper;
+            _tokenHelper = tokenHelper;
         }
 
         public UserDetailDto GetById(int userId)
@@ -34,7 +41,11 @@ namespace Management.Users
 
         public User Create(UserCreateDto createUserDto)
         {
+            var userId = _tokenHelper.GetUserIdFromContext();
             var user = _mapper.Map<User>(createUserDto);
+            user.CreatedBy = userId.ToString();
+            user.CreatedOn = DateTime.UtcNow;
+
             _context.Users.Add(user);
             _context.SaveChanges();
             return user;
@@ -42,14 +53,15 @@ namespace Management.Users
 
         public void Update(int id, UserUpdateDto updatedUserDto)
         {
-            var usersIds = _context.Users.Include(u => u.Role).Where(u => u.Id == id).ToList();
-
-            foreach (var userId in usersIds)
-            {
-                _context.Users.Remove(userId);
-            }
+            var usersId = _context.Users.Where(u => u.Id == id).ToList();
+            //foreach (var userId in usersIds)
+            //{
+            //    _context.Users.Remove(userId);
+            //}
 
             var user = _mapper.Map<User>(updatedUserDto);
+            //user.UpdatedBy=
+            user.UpdatedOn = DateTime.UtcNow;
             _context.Users.Add(user);
             _context.SaveChanges();
 

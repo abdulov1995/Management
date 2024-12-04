@@ -10,8 +10,8 @@ namespace Management.Auth.Dto
         public string? LastName { get; set; }
         public string UserName { get; set; }
         public int Age { get; set; }
-       // [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")]
         public string Email { get; set; }
+        public string? CreatedBy { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
     }

@@ -35,7 +35,11 @@ namespace StudentWebApi
                     UserName = "neo",
                     Password = PasswordHelper.CreateMd5("Berbatov123@"),
                     IsDeleted = false,
-                    RoleId=1
+                    CreatedOn = DateTime.UtcNow,
+                    CreatedBy = "1",
+                    UpdatedOn = DateTime.UtcNow,
+                    UpdatedBy = "1",
+                    RoleId = 1
                 });
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
