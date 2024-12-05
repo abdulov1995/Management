@@ -19,7 +19,7 @@ namespace Management.Auth
 
     [ApiController]
     [Route("api/auth")]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
         private readonly IAuthService _authService;
         private readonly AppDbContext _context;
@@ -34,9 +34,9 @@ namespace Management.Auth
         [HttpPost("signup")]
         public IActionResult SignUp([FromBody] SignUpRequestDto signUpRequest)
         {
-            
             var user = _authService.SignUp(signUpRequest);
             var token = _tokenHelper.GenerateJwtToken(user);
+           
             var response = new SignUpResponseDto
             {
                 AccessToken = token

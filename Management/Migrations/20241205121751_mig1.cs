@@ -41,8 +41,8 @@ namespace Management.Migrations
                     UserName = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: false),
-                    UpdatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     RoleId = table.Column<int>(type: "integer", nullable: false)
@@ -97,7 +97,7 @@ namespace Management.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Age", "CreatedBy", "CreatedOn", "Email", "FirstName", "IsDeleted", "LastName", "Password", "RoleId", "UpdatedBy", "UpdatedOn", "UserName" },
-                values: new object[] { 1, 29, "1", new DateTime(2024, 12, 3, 22, 38, 24, 842, DateTimeKind.Utc).AddTicks(3798), "kamal@mail.ru", "Kamal", false, "Abdulov", "A0931047E9DA549847FC8EAADD89FE16", 1, "1", new DateTime(2024, 12, 3, 22, 38, 24, 842, DateTimeKind.Utc).AddTicks(3799), "neo" });
+                values: new object[] { 1, 29, "1", new DateTime(2024, 12, 5, 12, 17, 51, 248, DateTimeKind.Utc).AddTicks(4803), "kamal@mail.ru", "Kamal", false, "Abdulov", "A0931047E9DA549847FC8EAADD89FE16", 1, "1", new DateTime(2024, 12, 5, 12, 17, 51, 248, DateTimeKind.Utc).AddTicks(4804), "neo" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",

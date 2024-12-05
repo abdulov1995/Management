@@ -41,11 +41,12 @@ namespace Management.Users
 
         public User Create(UserCreateDto createUserDto)
         {
-            var userId = _tokenHelper.GetUserIdFromContext();
+           
             var user = _mapper.Map<User>(createUserDto);
+                        var userId = _tokenHelper.ExtractUserIdFromToken(_tokenHelper.GenerateJwtToken(user));
+
             user.CreatedBy = userId.ToString();
             user.CreatedOn = DateTime.UtcNow;
-
             _context.Users.Add(user);
             _context.SaveChanges();
             return user;

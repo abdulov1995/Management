@@ -94,7 +94,6 @@ namespace Management.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedOn")
@@ -124,7 +123,7 @@ namespace Management.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedOn")
+                    b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
@@ -144,7 +143,7 @@ namespace Management.Migrations
                             Id = 1,
                             Age = 29,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 3, 22, 38, 24, 842, DateTimeKind.Utc).AddTicks(3798),
+                            CreatedOn = new DateTime(2024, 12, 5, 12, 17, 51, 248, DateTimeKind.Utc).AddTicks(4803),
                             Email = "kamal@mail.ru",
                             FirstName = "Kamal",
                             IsDeleted = false,
@@ -152,7 +151,7 @@ namespace Management.Migrations
                             Password = "A0931047E9DA549847FC8EAADD89FE16",
                             RoleId = 1,
                             UpdatedBy = "1",
-                            UpdatedOn = new DateTime(2024, 12, 3, 22, 38, 24, 842, DateTimeKind.Utc).AddTicks(3799),
+                            UpdatedOn = new DateTime(2024, 12, 5, 12, 17, 51, 248, DateTimeKind.Utc).AddTicks(4804),
                             UserName = "neo"
                         });
                 });

@@ -8,9 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Management.Users
 {
     [ApiController]
-    [Route("api/users")]
-   // [Authorize(Roles="Admin")]
-    public class UsersController : Controller
+    [Route("api/user")]
+    public class UsersController : BaseController
     {
         private readonly IUserService _userService;
 

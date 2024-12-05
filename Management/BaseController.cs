@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Management
 {
-    [ApiController]
-    [Route("api/roles")]
-    [Authorize(Roles = "Admin")]
-    public class BaseController
+    //[ApiController]
+    //[Route("api/auth/user/role/management")]
+    //[Authorize(Roles = "Admin")]
+    public class BaseController:Controller
     {
     }
 }

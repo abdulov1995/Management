@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Management.Roles
 {
     [ApiController]
-    [Route("api/roles")]
+    [Route("api/role")]
     [Authorize(Roles = "Admin")]
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
         private readonly IRoleService _roleService;
 

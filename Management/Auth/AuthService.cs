@@ -47,7 +47,7 @@ namespace Management.Auth
                 Password = PasswordHelper.CreateMd5(signUpRequest.Password),
                 FirstName = signUpRequest.FirstName,
                 LastName = signUpRequest.LastName,
-                //CreatedBy=_tokenHelper.GetUserIdFromContext(_tokenHelper.GenerateJwtToken(signUpRequest))
+               
                 Age = signUpRequest.Age,
                
                 RoleId = 2

@@ -11,19 +11,19 @@ using StudentWebApi;
 
 namespace Management.Extentions.TokenHelper
 {
-    public  class TokenHelper
+    public class TokenHelper
     {
         private readonly IConfiguration _configuration;
         private readonly AppDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TokenHelper(IConfiguration configuration,AppDbContext context, IHttpContextAccessor httpContextAccessor)
+        public TokenHelper(IConfiguration configuration, AppDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _context = context;
             _httpContextAccessor = httpContextAccessor;
         }
-        public  string GenerateJwtToken(User user)
+        public string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
@@ -31,7 +31,7 @@ namespace Management.Extentions.TokenHelper
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        new Claim (ClaimTypes.NameIdentifier,user.Id.ToString()),
                         new Claim(ClaimTypes.Role, user.Role.Name)
                     }),
                 Issuer = _configuration["Jwt:Issuer"],
@@ -42,10 +42,16 @@ namespace Management.Extentions.TokenHelper
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-        public int GetUserIdFromContext()
+        public string ExtractUserIdFromToken(string token)
         {
-            var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            return userIdClaim != null ? int.Parse(userIdClaim) : 0;
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jsonToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+
+            var userIdClaim = jsonToken?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            return userIdClaim.Value;
         }
+
     }
 }
+
