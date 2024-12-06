@@ -42,15 +42,21 @@ namespace Management.Extentions.TokenHelper
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-        public string ExtractUserIdFromToken(string token)
+        public string GetUserIdFromToken()
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jsonToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
-
-            var userIdClaim = jsonToken?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
-            return userIdClaim.Value;
+            var userIdClaim =_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            return userIdClaim?.Value; 
         }
+
+        //public string ExtractUserIdFromToken(string token)
+        //{
+        //    var tokenHandler = new JwtSecurityTokenHandler();
+        //    var jsonToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+
+        //    var userIdClaim = jsonToken?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+        //    return userIdClaim.Value;
+        //}
 
     }
 }

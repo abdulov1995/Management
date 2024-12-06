@@ -21,8 +21,8 @@ namespace StudentWebApi
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Role>().HasData(
-               new Role { Id = 1, Name = "Admin" },
-               new Role { Id = 2, Name = "User" });
+               new Role { Id = 1, Name = "Admin",CreatedBy="1" },
+               new Role { Id = 2, Name = "User",CreatedBy = "1" });
 
             modelBuilder.Entity<User>().HasData(
                 new User

@@ -14,6 +14,7 @@ namespace Management.Users
             CreateMap<User, UserDto>();
             CreateMap<UserCreateDto, User>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName));
+            CreateMap<UserUpdateDto, User>().ReverseMap();
             CreateMap<RoleUpdateDto, User>();
             CreateMap<SignUpRequestDto, User>();
             CreateMap<SignInRequestDto, User>();

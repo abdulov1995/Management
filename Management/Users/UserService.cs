@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Security.Claims;
 using Management.Extentions.TokenHelper;
 using Microsoft.IdentityModel.Tokens;
+using Management.Extentions.Helpers;
 
 namespace Management.Users
 {
@@ -43,10 +44,10 @@ namespace Management.Users
         {
            
             var user = _mapper.Map<User>(createUserDto);
-                        var userId = _tokenHelper.ExtractUserIdFromToken(_tokenHelper.GenerateJwtToken(user));
+            var userId = _tokenHelper.GetUserIdFromToken();
 
-            user.CreatedBy = userId.ToString();
-            user.CreatedOn = DateTime.UtcNow;
+            user.CreatedBy = userId;
+            user.Password= PasswordHelper.CreateMd5(user.Password);
             _context.Users.Add(user);
             _context.SaveChanges();
             return user;
@@ -61,8 +62,11 @@ namespace Management.Users
             //}
 
             var user = _mapper.Map<User>(updatedUserDto);
-            //user.UpdatedBy=
-            user.UpdatedOn = DateTime.UtcNow;
+            var userId = _tokenHelper.GetUserIdFromToken();
+
+            user.UpdatedBy = userId;
+            user.Password = PasswordHelper.CreateMd5(user.Password);
+
             _context.Users.Add(user);
             _context.SaveChanges();
 

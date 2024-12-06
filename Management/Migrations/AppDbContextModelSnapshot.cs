@@ -30,12 +30,24 @@ namespace Management.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -45,14 +57,18 @@ namespace Management.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(5406),
                             IsDeleted = false,
-                            Name = "Admin"
+                            Name = "Admin",
+                            UpdatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(5407)
                         },
                         new
                         {
                             Id = 2,
+                            CreatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(5410),
                             IsDeleted = false,
-                            Name = "User"
+                            Name = "User",
+                            UpdatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(5410)
                         });
                 });
 
@@ -123,7 +139,7 @@ namespace Management.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("UpdatedOn")
+                    b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
@@ -143,7 +159,7 @@ namespace Management.Migrations
                             Id = 1,
                             Age = 29,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 5, 12, 17, 51, 248, DateTimeKind.Utc).AddTicks(4803),
+                            CreatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(6000),
                             Email = "kamal@mail.ru",
                             FirstName = "Kamal",
                             IsDeleted = false,
@@ -151,7 +167,7 @@ namespace Management.Migrations
                             Password = "A0931047E9DA549847FC8EAADD89FE16",
                             RoleId = 1,
                             UpdatedBy = "1",
-                            UpdatedOn = new DateTime(2024, 12, 5, 12, 17, 51, 248, DateTimeKind.Utc).AddTicks(4804),
+                            UpdatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(6001),
                             UserName = "neo"
                         });
                 });
