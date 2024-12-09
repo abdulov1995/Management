@@ -57,18 +57,20 @@ namespace Management.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(5406),
+                            CreatedBy = "1",
+                            CreatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3644),
                             IsDeleted = false,
                             Name = "Admin",
-                            UpdatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(5407)
+                            UpdatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3645)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(5410),
+                            CreatedBy = "1",
+                            CreatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3648),
                             IsDeleted = false,
                             Name = "User",
-                            UpdatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(5410)
+                            UpdatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3648)
                         });
                 });
 
@@ -159,7 +161,7 @@ namespace Management.Migrations
                             Id = 1,
                             Age = 29,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(6000),
+                            CreatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(4219),
                             Email = "kamal@mail.ru",
                             FirstName = "Kamal",
                             IsDeleted = false,
@@ -167,7 +169,7 @@ namespace Management.Migrations
                             Password = "A0931047E9DA549847FC8EAADD89FE16",
                             RoleId = 1,
                             UpdatedBy = "1",
-                            UpdatedOn = new DateTime(2024, 12, 6, 20, 41, 52, 747, DateTimeKind.Utc).AddTicks(6001),
+                            UpdatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(4219),
                             UserName = "neo"
                         });
                 });

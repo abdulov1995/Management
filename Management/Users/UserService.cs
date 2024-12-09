@@ -63,7 +63,7 @@ namespace Management.Users
 
             var user = _mapper.Map<User>(updatedUserDto);
             var userId = _tokenHelper.GetUserIdFromToken();
-
+            user.RoleId=updatedUserDto.RoleId;
             user.UpdatedBy = userId;
             user.Password = PasswordHelper.CreateMd5(user.Password);
 

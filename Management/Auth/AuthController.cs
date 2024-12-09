@@ -19,6 +19,7 @@ namespace Management.Auth
 
     [ApiController]
     [Route("api/auth")]
+
     public class AuthController : BaseController
     {
         private readonly IAuthService _authService;

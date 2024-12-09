@@ -9,6 +9,8 @@ namespace Management.Users
 {
     [ApiController]
     [Route("api/user")]
+    [Authorize(Roles = "Admin")]
+
     public class UsersController : BaseController
     {
         private readonly IUserService _userService;
