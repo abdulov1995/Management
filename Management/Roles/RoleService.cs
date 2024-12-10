@@ -20,13 +20,13 @@ namespace Management.Roles
 
         public RoleDetailDto GetById(int roleId)
         {
-            var role = _context.Roles.Include(u => u.User).FirstOrDefault(r => r.Id == roleId && !r.IsDeleted);
+            var role = _context.Roles.FirstOrDefault(r => r.Id == roleId && !r.IsDeleted);
             return _mapper.Map<RoleDetailDto>(role);
         }
 
         public List<RoleDto> GetAll()
         {
-            var roles = _context.Roles.Include(u => u.User).Where(r => !r.IsDeleted).ToList();
+            var roles = _context.Roles.Where(r => !r.IsDeleted).ToList();
             return _mapper.Map<List<RoleDto>>(roles);
         }
 
@@ -57,7 +57,7 @@ namespace Management.Roles
 
         public void Update(int id, RoleUpdateDto updatedRoleDto)
         {
-            var rolesIds = _context.Roles.Include(u => u.User).Where(r => r.Id == id).ToList();
+            var rolesIds = _context.Roles.Where(r => r.Id == id).ToList();
 
             foreach (var roleId in rolesIds)
             {
@@ -89,7 +89,6 @@ namespace Management.Roles
         public void Delete(int roleId)
         {
             var role = _context.Roles
-                .Include(r => r.User)
                 .FirstOrDefault(r => r.Id == roleId);
             //if (role == null)
             //{

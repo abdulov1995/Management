@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentWebApi;
@@ -11,9 +12,11 @@ using StudentWebApi;
 namespace Management.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241210084942_mig1")]
+    partial class mig1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +36,7 @@ namespace Management.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("CreatedOn")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsDeleted")
@@ -46,7 +49,7 @@ namespace Management.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("UpdatedOn")
+                    b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -58,15 +61,19 @@ namespace Management.Migrations
                         {
                             Id = 1,
                             CreatedBy = "1",
+                            CreatedOn = new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(7503),
                             IsDeleted = false,
-                            Name = "Admin"
+                            Name = "Admin",
+                            UpdatedOn = new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(7506)
                         },
                         new
                         {
                             Id = 2,
                             CreatedBy = "1",
+                            CreatedOn = new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(7510),
                             IsDeleted = false,
-                            Name = "User"
+                            Name = "User",
+                            UpdatedOn = new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(7510)
                         });
                 });
 
@@ -110,7 +117,7 @@ namespace Management.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("CreatedOn")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -137,7 +144,7 @@ namespace Management.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("UpdatedOn")
+                    b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
@@ -146,7 +153,8 @@ namespace Management.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .IsUnique();
 
                     b.ToTable("Users");
 
@@ -156,7 +164,7 @@ namespace Management.Migrations
                             Id = 1,
                             Age = 29,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 10, 9, 51, 40, 621, DateTimeKind.Utc).AddTicks(6985),
+                            CreatedOn = new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(8226),
                             Email = "kamal@mail.ru",
                             FirstName = "Kamal",
                             IsDeleted = false,
@@ -164,7 +172,7 @@ namespace Management.Migrations
                             Password = "A0931047E9DA549847FC8EAADD89FE16",
                             RoleId = 1,
                             UpdatedBy = "1",
-                            UpdatedOn = new DateTime(2024, 12, 10, 9, 51, 40, 621, DateTimeKind.Utc).AddTicks(6989),
+                            UpdatedOn = new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(8227),
                             UserName = "neo"
                         });
                 });
@@ -191,12 +199,18 @@ namespace Management.Migrations
             modelBuilder.Entity("Management.Users.Model.User", b =>
                 {
                     b.HasOne("Management.Roles.Model.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
+                        .WithOne("User")
+                        .HasForeignKey("Management.Users.Model.User", "RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Management.Roles.Model.Role", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

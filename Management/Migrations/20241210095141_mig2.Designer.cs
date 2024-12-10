@@ -12,8 +12,8 @@ using StudentWebApi;
 namespace Management.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241209095059_mig1")]
-    partial class mig1
+    [Migration("20241210095141_mig2")]
+    partial class mig2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,7 @@ namespace Management.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsDeleted")
@@ -49,7 +49,7 @@ namespace Management.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedOn")
+                    b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -61,19 +61,15 @@ namespace Management.Migrations
                         {
                             Id = 1,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3644),
                             IsDeleted = false,
-                            Name = "Admin",
-                            UpdatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3645)
+                            Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3648),
                             IsDeleted = false,
-                            Name = "User",
-                            UpdatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3648)
+                            Name = "User"
                         });
                 });
 
@@ -117,7 +113,7 @@ namespace Management.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -144,7 +140,7 @@ namespace Management.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedOn")
+                    b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
@@ -153,8 +149,7 @@ namespace Management.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
 
@@ -164,7 +159,7 @@ namespace Management.Migrations
                             Id = 1,
                             Age = 29,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(4219),
+                            CreatedOn = new DateTime(2024, 12, 10, 9, 51, 40, 621, DateTimeKind.Utc).AddTicks(6985),
                             Email = "kamal@mail.ru",
                             FirstName = "Kamal",
                             IsDeleted = false,
@@ -172,7 +167,7 @@ namespace Management.Migrations
                             Password = "A0931047E9DA549847FC8EAADD89FE16",
                             RoleId = 1,
                             UpdatedBy = "1",
-                            UpdatedOn = new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(4219),
+                            UpdatedOn = new DateTime(2024, 12, 10, 9, 51, 40, 621, DateTimeKind.Utc).AddTicks(6989),
                             UserName = "neo"
                         });
                 });
@@ -199,18 +194,12 @@ namespace Management.Migrations
             modelBuilder.Entity("Management.Users.Model.User", b =>
                 {
                     b.HasOne("Management.Roles.Model.Role", "Role")
-                        .WithOne("User")
-                        .HasForeignKey("Management.Users.Model.User", "RoleId")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("Management.Roles.Model.Role", b =>
-                {
-                    b.Navigation("User")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

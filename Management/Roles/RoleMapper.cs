@@ -11,8 +11,8 @@ namespace Management.Roles
             CreateMap<Role, RoleDto>();
             CreateMap<RoleCreateDto, Role>();
             CreateMap<RoleUpdateDto, Role>();
-            CreateMap<Role, RoleDetailDto>()
-                .ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.User));
+            CreateMap<Role, RoleDetailDto>();
+               
         }
     }
 }

@@ -94,14 +94,14 @@ namespace Management.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedOn", "IsDeleted", "Name", "UpdatedBy", "UpdatedOn" },
                 values: new object[,]
                 {
-                    { 1, "1", new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3644), false, "Admin", null, new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3645) },
-                    { 2, "1", new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3648), false, "User", null, new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(3648) }
+                    { 1, "1", new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(7503), false, "Admin", null, new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(7506) },
+                    { 2, "1", new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(7510), false, "User", null, new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(7510) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Age", "CreatedBy", "CreatedOn", "Email", "FirstName", "IsDeleted", "LastName", "Password", "RoleId", "UpdatedBy", "UpdatedOn", "UserName" },
-                values: new object[] { 1, 29, "1", new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(4219), "kamal@mail.ru", "Kamal", false, "Abdulov", "A0931047E9DA549847FC8EAADD89FE16", 1, "1", new DateTime(2024, 12, 9, 9, 50, 59, 261, DateTimeKind.Utc).AddTicks(4219), "neo" });
+                values: new object[] { 1, 29, "1", new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(8226), "kamal@mail.ru", "Kamal", false, "Abdulov", "A0931047E9DA549847FC8EAADD89FE16", 1, "1", new DateTime(2024, 12, 10, 8, 49, 42, 65, DateTimeKind.Utc).AddTicks(8227), "neo" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",

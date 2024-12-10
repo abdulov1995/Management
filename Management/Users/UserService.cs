@@ -48,6 +48,7 @@ namespace Management.Users
 
             user.CreatedBy = userId;
             user.Password= PasswordHelper.CreateMd5(user.Password);
+            user.CreatedOn=DateTime.UtcNow;
             _context.Users.Add(user);
             _context.SaveChanges();
             return user;
@@ -55,19 +56,18 @@ namespace Management.Users
 
         public void Update(int id, UserUpdateDto updatedUserDto)
         {
-            var usersId = _context.Users.Where(u => u.Id == id).ToList();
-            //foreach (var userId in usersIds)
-            //{
-            //    _context.Users.Remove(userId);
-            //}
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            if (user is null)
+            {
 
-            var user = _mapper.Map<User>(updatedUserDto);
+            }
+
+            var newUser = _mapper.Map(updatedUserDto,user);
             var userId = _tokenHelper.GetUserIdFromToken();
-            user.RoleId=updatedUserDto.RoleId;
-            user.UpdatedBy = userId;
-            user.Password = PasswordHelper.CreateMd5(user.Password);
+            newUser.UpdatedBy = userId;
+            newUser.Password = PasswordHelper.CreateMd5(newUser.Password);
 
-            _context.Users.Add(user);
+            _context.Users.Update(newUser);
             _context.SaveChanges();
 
         }
