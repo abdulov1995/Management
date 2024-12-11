@@ -16,7 +16,6 @@ using System.Text;
 
 namespace Management.Auth
 {
-
     [ApiController]
     [Route("api/auth")]
 
@@ -33,9 +32,9 @@ namespace Management.Auth
         }
 
         [HttpPost("signup")]
-        public IActionResult SignUp([FromBody] SignUpRequestDto signUpRequest)
+        public async Task<IActionResult> SignUp([FromBody] SignUpRequestDto signUpRequest)
         {
-            var user = _authService.SignUp(signUpRequest);
+            var user =await _authService.SignUp(signUpRequest);
             var token = _tokenHelper.GenerateJwtToken(user);
            
             var response = new SignUpResponseDto
@@ -46,10 +45,10 @@ namespace Management.Auth
         }
 
         [HttpPost("signin")]
-        public IActionResult SignIn([FromBody] SignInRequestDto signInRequest)
+        public async Task<IActionResult> SignIn([FromBody] SignInRequestDto signInRequest)
         {
             
-            var user = _authService.SignIn(signInRequest);
+            var user =await _authService.SignIn(signInRequest);
             var token = _tokenHelper.GenerateJwtToken(user);
             var response = new SignInResponseDto
             {

@@ -5,7 +5,7 @@ namespace Management.Auth
 {
     public interface IAuthService
     {
-        User SignUp(SignUpRequestDto signUpRequest);
-        User SignIn(SignInRequestDto signInRequest);
+        Task<User> SignUp(SignUpRequestDto signUpRequest);
+        Task<User> SignIn(SignInRequestDto signInRequest);
     }
 }

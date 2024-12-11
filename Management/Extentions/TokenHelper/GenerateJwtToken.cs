@@ -42,7 +42,7 @@ namespace Management.Extentions.TokenHelper
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-        public string GetUserIdFromToken()//Context
+        public string GetUserIdFromContext()
         {
             var userIdClaim =_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
             return userIdClaim?.Value; 

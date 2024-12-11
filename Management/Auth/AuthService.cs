@@ -7,6 +7,7 @@ using Management.Users.Dto;
 using Management.Users.Model;
 using Microsoft.EntityFrameworkCore;
 using StudentWebApi;
+using System.Threading.Tasks;
 
 namespace Management.Auth
 {
@@ -26,10 +27,10 @@ namespace Management.Auth
             _tokenHelper = tokenHelper;
 
         }
-        public User SignUp(SignUpRequestDto signUpRequest)
+        public async Task<User> SignUp(SignUpRequestDto signUpRequest)
         {
-            var existingUserName = _context.Users.FirstOrDefault(u => u.UserName == signUpRequest.UserName);
-            var existingEmail = _context.Users.FirstOrDefault(u => u.Email == signUpRequest.Email);
+            var existingUserName =await _context.Users.FirstOrDefaultAsync(u => u.UserName == signUpRequest.UserName);
+            var existingEmail = await _context.Users.FirstOrDefaultAsync(u => u.Email == signUpRequest.Email);
            
              if (existingEmail != null)
             {
@@ -39,7 +40,7 @@ namespace Management.Auth
             {
                 throw new ArgumentException("UserName is already in use.");
             }
-            var role = _context.Roles.FirstOrDefault(r => r.Id == 2);
+            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == 2);
             var newUser = new UserCreateDto
             {
                 UserName = signUpRequest.UserName,
@@ -47,18 +48,17 @@ namespace Management.Auth
                 Password = PasswordHelper.CreateMd5(signUpRequest.Password),
                 FirstName = signUpRequest.FirstName,
                 LastName = signUpRequest.LastName,
-               
                 Age = signUpRequest.Age,
-               
                 RoleId = 2
             };
 
-            return _userService.Create(newUser);
+            return await _userService.CreateAsync(newUser);
         }
 
-        public User SignIn(SignInRequestDto signInRequest)
+        public async Task<User> SignIn(SignInRequestDto signInRequest)
         {
-            var user = _context.Users.Include(u => u.Role).FirstOrDefault(u => u.Email == signInRequest.Email || u.UserName == signInRequest.UserName);
+            var user = await _context.Users.Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Email == signInRequest.Email || u.UserName == signInRequest.UserName);
 
             if (user == null)
             {
