@@ -11,6 +11,7 @@ using System.Security.Claims;
 using Management.Extentions.TokenHelper;
 using Microsoft.IdentityModel.Tokens;
 using Management.Extentions.Helpers;
+using System.Threading.Tasks;
 
 namespace Management.Users
 {
@@ -20,66 +21,82 @@ namespace Management.Users
         private readonly IMapper _mapper;
         private readonly TokenHelper _tokenHelper;
 
-
         public UserService(AppDbContext context, IMapper mapper, TokenHelper tokenHelper)
         {
             _context = context;
             _mapper = mapper;
             _tokenHelper = tokenHelper;
         }
-
-        public UserDetailDto GetById(int userId)
+        public async Task<UserDetailDto> GetByIdAsync(int userId)
         {
-            var user = _context.Users.Include(u => u.Role).FirstOrDefault(u => u.Id == userId && !u.IsDeleted);
+            var user = await _context.Users.Include(u => u.Role)
+                                           .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
             return _mapper.Map<UserDetailDto>(user);
         }
-
-        public List<UserDto> GetAll()
+        public async Task<List<UserDto>> GetAllAsync()
         {
-            var users = _context.Users.Include(u => u.Role).Where(u => !u.IsDeleted).ToList();
+            var users = await _context.Users.Include(u => u.Role)
+                                            .Where(u => !u.IsDeleted)
+                                            .ToListAsync();
             return _mapper.Map<List<UserDto>>(users);
         }
 
-        public User Create(UserCreateDto createUserDto)
+        public async Task<User> CreateAsync(UserCreateDto createUserDto)
         {
-           
-            var user = _mapper.Map<User>(createUserDto);
-            var userId = _tokenHelper.GetUserIdFromToken();
+            var existingUser = await _context.Users
+                                 .FirstOrDefaultAsync(u => u.Email == createUserDto.Email || u.UserName == createUserDto.UserName);
+            if (existingUser == null)
+            {
+                throw new Exception("User with the same email or username already exists.");
+            }
+            else
+            {
+                var user = _mapper.Map<User>(createUserDto);
+                var userId = _tokenHelper.GetUserIdFromContext();
 
-            user.CreatedBy = userId;
-            user.Password= PasswordHelper.CreateMd5(user.Password);
-            user.CreatedOn=DateTime.UtcNow;
-            _context.Users.Add(user);
-            _context.SaveChanges();
-            return user;
+                user.CreatedBy = userId;
+                user.Password = PasswordHelper.CreateMd5(user.Password);
+                user.CreatedOn = DateTime.UtcNow;
+
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+                return user;
+            }
         }
-
-        public void Update(int id, UserUpdateDto updatedUserDto)
+        public async Task UpdateAsync(int id, UserUpdateDto updatedUserDto)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user is null)
             {
-
+                throw new Exception("User not found!");
             }
+            else
+            {
+                var newUser = _mapper.Map(updatedUserDto, user);
+                var userId = _tokenHelper.GetUserIdFromContext();
+                newUser.UpdatedBy = userId;
+                newUser.Password = PasswordHelper.CreateMd5(newUser.Password);
 
-            var newUser = _mapper.Map(updatedUserDto,user);
-            var userId = _tokenHelper.GetUserIdFromToken();
-            newUser.UpdatedBy = userId;
-            newUser.Password = PasswordHelper.CreateMd5(newUser.Password);
-
-            _context.Users.Update(newUser);
-            _context.SaveChanges();
-
+                _context.Users.Update(newUser);
+                await _context.SaveChangesAsync();
+            }
         }
-
-        public void Delete(int userId)
+        public async Task DeleteAsync(int userId)
         {
-            var user = _context.Users
-                .Include(u => u.Role)
-                .FirstOrDefault(u => u.Id == userId);
-            user.IsDeleted = true;
-            _context.SaveChanges();
+            var user = await _context.Users.Include(u => u.Role)
+                                           .FirstOrDefaultAsync(u => u.Id == userId);
+            if (user is null)
+            {
+                throw new Exception("User not found!");
+            }
+            else
+            {
+                user.IsDeleted = true;
+                user.DeletedBy = _tokenHelper.GetUserIdFromContext();
+                user.DeletedOn = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
+            }
         }
     }
-
 }

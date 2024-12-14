@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Management.Extentions.TokenHelper;
 using Management.Roles.Dto;
 using Management.Roles.Model;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,14 @@ namespace Management.Roles
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly TokenHelper _tokenHelper;
 
-        public RoleService(IMapper mapper, AppDbContext context)
+
+        public RoleService(IMapper mapper, AppDbContext context, TokenHelper tokenHelper)
         {
             _mapper = mapper;
             _context = context;
+            _tokenHelper = tokenHelper;
         }
 
         public RoleDetailDto GetById(int roleId)
@@ -35,7 +39,7 @@ namespace Management.Roles
             var role = _mapper.Map<Role>(createRoleDto);
             _context.Roles.Add(role);
             _context.SaveChanges();
-            var userRoles = new List<UserRole>();
+            var userRoles = new List <UserRole>();
 
             foreach (var userId in createRoleDto.UserIds)
             {
@@ -90,13 +94,18 @@ namespace Management.Roles
         {
             var role = _context.Roles
                 .FirstOrDefault(r => r.Id == roleId);
-            //if (role == null)
-            //{
-            //    throw new InvalidOperationException($"Role with ID {roleId} not found.");
-            //}
-            //role.IsDeleted = true;
-            role.IsDeleted = true;
-            _context.SaveChanges();
+            if (role == null)
+            {
+                throw new InvalidOperationException($"Role with ID {roleId} not found.");
+            }
+            else
+            {
+                role.DeletedBy = _tokenHelper.GetUserIdFromContext();
+                role.DeletedOn=DateTime.UtcNow;
+                role.IsDeleted = true;
+                _context.SaveChanges();
+            }
+           
         }
     }
 

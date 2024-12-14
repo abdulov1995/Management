@@ -21,37 +21,39 @@ namespace Management.Users
         }
 
         [HttpGet]
-        public ActionResult<List<UserDto>> GetAll()
+        [HttpGet]
+        public async Task<ActionResult<List<UserDto>>> GetAllAsync()
         {
-            return _userService.GetAll();
+            var users = await _userService.GetAllAsync();
+            return Ok(users);
         }
 
         [HttpGet("{id}")]
-        public UserDetailDto GetById(int id)
+        public async Task<ActionResult<UserDetailDto>> GetByIdAsync(int id)
         {
-            return _userService.GetById(id);
+            var userDetail = await _userService.GetByIdAsync(id);
+            return Ok(userDetail);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] UserCreateDto user)
+        public async Task<IActionResult> CreateAsync([FromBody] UserCreateDto user)
         {
-           
-            _userService.Create(user);
-            return Ok();
+            var createdUser = await _userService.CreateAsync(user);
+            return Ok(createdUser);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] UserUpdateDto updatedUser)
+        public async Task<IActionResult> UpdateAsync(int id, [FromBody] UserUpdateDto updatedUser)
         {
-           
-            _userService.Update(id, updatedUser);
+            await _userService.UpdateAsync(id, updatedUser);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            _userService.Delete(id);
+            await _userService.DeleteAsync(id);
+            return NoContent(); 
         }
     }
 

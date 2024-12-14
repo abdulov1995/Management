@@ -6,10 +6,10 @@ namespace Management.Users
 {
     public interface IUserService
     {
-        UserDetailDto GetById(int userId);
-        List<UserDto> GetAll();
-        User Create(UserCreateDto createUserDto);
-        void Update(int id, UserUpdateDto updatedUserDto);
-        void Delete(int userId);
+        Task<UserDetailDto> GetByIdAsync(int userId);
+        Task<List<UserDto>> GetAllAsync();
+        Task<User> CreateAsync(UserCreateDto createUserDto);
+        Task UpdateAsync(int id, UserUpdateDto updatedUserDto);
+        Task DeleteAsync(int userId);
     }
 }
