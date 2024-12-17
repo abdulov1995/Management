@@ -1,6 +1,8 @@
 ﻿using Management.Roles.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Management.Roles
 {
@@ -17,44 +19,42 @@ namespace Management.Roles
         }
 
         [HttpGet]
-        public ActionResult<List<RoleDto>> GetAll()
+        public async Task<ActionResult<List<RoleDto>>> GetAll()
         {
-            return _roleService.GetAll();
+            var roles = await _roleService.GetAllAsync();
+            return Ok(roles);
         }
 
         [HttpGet("{id}")]
-        public RoleDetailDto GetById(int id)
+        public async Task<ActionResult<RoleDetailDto>> GetById(int id)
         {
-            return _roleService.GetById(id);
+            var roleDetail = await _roleService.GetByIdAsync(id);
+            if (roleDetail == null)
+            {
+                return NotFound();
+            }
+            return Ok(roleDetail);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody]RoleCreateDto role)
+        public async Task<IActionResult> Create([FromBody] RoleCreateDto role)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            _roleService.Create(role);
+            await _roleService.CreateAsync(role);
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int roleId, [FromBody] RoleUpdateDto updatedRoleDto)
+        public async Task<IActionResult> Update(int roleId, [FromBody] RoleUpdateDto updatedRoleDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            _roleService.Update(roleId, updatedRoleDto);
+            await _roleService.UpdateAsync(roleId, updatedRoleDto);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int roleId)
+        public async Task<IActionResult> Delete(int roleId)
         {
-            _roleService.Delete(roleId);
+            await _roleService.DeleteAsync(roleId);
+            return NoContent(); 
         }
     }
-
 }

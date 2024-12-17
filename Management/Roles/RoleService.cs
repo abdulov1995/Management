@@ -2,6 +2,7 @@
 using Management.Extentions.TokenHelper;
 using Management.Roles.Dto;
 using Management.Roles.Model;
+using Management.Users.Model;
 using Microsoft.EntityFrameworkCore;
 using StudentWebApi;
 
@@ -22,78 +23,50 @@ namespace Management.Roles
             _tokenHelper = tokenHelper;
         }
 
-        public RoleDetailDto GetById(int roleId)
+        public async Task <RoleDetailDto> GetByIdAsync(int roleId)
         {
-            var role = _context.Roles.FirstOrDefault(r => r.Id == roleId && !r.IsDeleted);
+            var role =await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId && !r.IsDeleted);
             return _mapper.Map<RoleDetailDto>(role);
         }
 
-        public List<RoleDto> GetAll()
+        public async Task< List<RoleDto>> GetAllAsync()
         {
-            var roles = _context.Roles.Where(r => !r.IsDeleted).ToList();
+
+            var roles = await _context.Roles.Where(r => !r.IsDeleted).ToListAsync();
             return _mapper.Map<List<RoleDto>>(roles);
         }
 
-        public void Create(RoleCreateDto createRoleDto)
+        public async Task CreateAsync(RoleCreateDto createRoleDto)
         {
+
             var role = _mapper.Map<Role>(createRoleDto);
-            _context.Roles.Add(role);
-            _context.SaveChanges();
-            var userRoles = new List <UserRole>();
-
-            foreach (var userId in createRoleDto.UserIds)
-            {
-                var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-                if (user == null)
-                {
-                    throw new ArgumentException($"User with ID {userId} does not exist.");
-                }
-                var userRole = new UserRole
-                {
-                    UserId = userId,
-                    RoleId = role.Id,
-                };
-                userRoles.Add(userRole);
-            }
-            _context.UserRoles.AddRange(userRoles);
-            _context.SaveChanges();
+            role.CreatedBy= _tokenHelper.GetUserIdFromContext();
+            role.CreatedOn = DateTime.UtcNow;
+            await _context.Roles.AddAsync(role);
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(int id, RoleUpdateDto updatedRoleDto)
+        public async Task UpdateAsync(int id, RoleUpdateDto updatedRoleDto)
         {
-            var rolesIds = _context.Roles.Where(r => r.Id == id).ToList();
-
-            foreach (var roleId in rolesIds)
+            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == id);
+            if (role is null)
             {
-                _context.Roles.Remove(roleId);
+                throw new Exception("Role not found!");
             }
-            var role = _mapper.Map<Role>(updatedRoleDto);
-            _context.Roles.Add(role);
-            _context.SaveChanges();
-            var userRoles = new List<UserRole>();
-
-            foreach (var userId in updatedRoleDto.UserIds)
+            else
             {
-                var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-                if (user == null)
-                {
-                    throw new ArgumentException($"User with ID {userId} does not exist.");
-                }
-                var userRole = new UserRole
-                {
-                    UserId = userId,
-                    RoleId = role.Id,
-                };
-                userRoles.Add(userRole);
+                var newRole = _mapper.Map(updatedRoleDto, role);
+                role.UpdatedBy = _tokenHelper.GetUserIdFromContext();
+                _context.Roles.Update(newRole);
+                await _context.SaveChangesAsync();
             }
-            _context.UserRoles.AddRange(userRoles);
-            _context.SaveChanges();
         }
 
-        public void Delete(int roleId)
+
+        public async Task DeleteAsync(int roleId)
         {
-            var role = _context.Roles
-                .FirstOrDefault(r => r.Id == roleId);
+            var role = await _context.Roles
+                                     .FirstOrDefaultAsync(r => r.Id == roleId);
             if (role == null)
             {
                 throw new InvalidOperationException($"Role with ID {roleId} not found.");
@@ -101,12 +74,13 @@ namespace Management.Roles
             else
             {
                 role.DeletedBy = _tokenHelper.GetUserIdFromContext();
-                role.DeletedOn=DateTime.UtcNow;
+                role.DeletedOn = DateTime.UtcNow;
                 role.IsDeleted = true;
-                _context.SaveChanges();
+
+                await _context.SaveChangesAsync();
             }
-           
         }
+
     }
 
 }

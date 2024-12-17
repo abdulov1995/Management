@@ -14,15 +14,15 @@ namespace StudentWebApi
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
+      //  public DbSet<UserRole> UserRoles { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Role>().HasData(
-               new Role { Id = 1, Name = "Admin",CreatedBy="1" },
-               new Role { Id = 2, Name = "User",CreatedBy = "1" });
+               new Role { Id = 1, Name = "Admin",CreatedBy="1",CreatedOn=DateTime.UtcNow },
+               new Role { Id = 2, Name = "User",CreatedBy = "1", CreatedOn = DateTime.UtcNow });
 
             modelBuilder.Entity<User>().HasData(
                 new User
@@ -41,6 +41,10 @@ namespace StudentWebApi
                     UpdatedBy = "1",
                     RoleId = 1
                 });
+            modelBuilder.Entity<User>()
+            .HasOne(u => u.Role)          
+            .WithMany(r => r.Users)      
+            .HasForeignKey(u => u.RoleId);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

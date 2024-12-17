@@ -4,10 +4,10 @@ namespace Management.Roles
 {
     public interface IRoleService
     {
-        RoleDetailDto GetById(int roleId);
-        List<RoleDto> GetAll();
-        void Create(RoleCreateDto createRoleDto);
-        void Update(int id, RoleUpdateDto updatedRoleDto);
-        public void Delete(int roleId);
+        Task<RoleDetailDto> GetByIdAsync(int roleId);
+        Task<List<RoleDto>> GetAllAsync();
+        Task CreateAsync(RoleCreateDto createRoleDto);
+        Task UpdateAsync(int id, RoleUpdateDto updatedRoleDto);
+        Task DeleteAsync(int roleId);
     }
 }
