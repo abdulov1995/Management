@@ -6,6 +6,6 @@ namespace Management.Roles.Model
     {
         public string Name { get; set; } 
         public bool IsDeleted { get; internal set; }
-        public ICollection<User> Users { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; }
     }
 }

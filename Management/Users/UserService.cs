@@ -29,23 +29,24 @@ namespace Management.Users
         }
         public async Task<UserDetailDto> GetByIdAsync(int userId)
         {
-            var user = await _context.Users.Include(u => u.Role)
-                                           .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
+            var user = await _context.Users.Include(u => u.UserRoles)
+                .ThenInclude(r => r.Role)
+                .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
             return _mapper.Map<UserDetailDto>(user);
         }
         public async Task<List<UserDto>> GetAllAsync()
         {
-            var users = await _context.Users.Include(u => u.Role)
-                                            .Where(u => !u.IsDeleted)
-                                            .ToListAsync();
+            var users = await _context.Users.Include(u => u.UserRoles)
+                .ThenInclude(r => r.Role)
+                .Where(u => !u.IsDeleted)
+                .ToListAsync();
             return _mapper.Map<List<UserDto>>(users);
         }
-
         public async Task<User> CreateAsync(UserCreateDto createUserDto)
         {
             var existingUser = await _context.Users
                                  .FirstOrDefaultAsync(u => u.Email == createUserDto.Email || u.UserName == createUserDto.UserName);
-            if (existingUser == null)
+            if (existingUser != null)
             {
                 throw new Exception("User with the same email or username already exists.");
             }
@@ -60,38 +61,75 @@ namespace Management.Users
 
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
+
+                var userRoles = new List<UserRole>();
+                foreach (var roleId in createUserDto.RoleIds)
+                {
+                    var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
+                    if (role == null)
+                    {
+                        throw new ArgumentException($"Role with ID {roleId} does not exist.");
+                    }
+                    var userRole = new UserRole
+                    {
+                        RoleId = roleId,
+                        UserId = user.Id
+                    };
+                    userRoles.Add(userRole);
+                }
+
+                _context.UserRoles.AddRange(userRoles);
+                _context.SaveChanges();
                 return user;
             }
+
         }
         public async Task UpdateAsync(int id, UserUpdateDto updatedUserDto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (user is null)
+            var user = await _context.Users
+                      .Include(u => u.UserRoles)
+                      .ThenInclude(r => r.Role)
+                      .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
             {
                 throw new Exception("User not found!");
             }
-            else
-            {
-                var newUser = _mapper.Map(updatedUserDto, user);
-                var userId = _tokenHelper.GetUserIdFromContext();
-                newUser.UpdatedBy = userId;
-                newUser.Password = PasswordHelper.CreateMd5(newUser.Password);
 
-                _context.Users.Update(newUser);
-                await _context.SaveChangesAsync();
-            }
+            var userId = _tokenHelper.GetUserIdFromContext();
+            _mapper.Map(updatedUserDto, user);
+
+            user.UpdatedBy = userId;
+            user.Password = PasswordHelper.CreateMd5(updatedUserDto.Password);
+            user.UpdatedOn = DateTime.UtcNow;
+
+            var existingUserRoles = _context.UserRoles.Where(ur => ur.UserId == user.Id);
+            _context.UserRoles.RemoveRange(existingUserRoles);
+
+            var userRoles = updatedUserDto.RoleIds.Select(roleId => new UserRole
+            {
+                UserId = user.Id,
+                RoleId = roleId
+            }).ToList();
+
+            await _context.UserRoles.AddRangeAsync(userRoles);
+            await _context.SaveChangesAsync();
         }
         public async Task DeleteAsync(int userId)
         {
-            var user = await _context.Users.Include(u => u.Role)
-                                           .FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _context.Users
+                .Include(u => u.UserRoles)
+                .FirstOrDefaultAsync(u => u.Id == userId);
             if (user is null)
             {
                 throw new Exception("User not found!");
             }
             else
             {
-                user.IsDeleted = true;
+                foreach (var userRole in user.UserRoles)
+                {
+                    userRole.IsDeleted = true;
+                }
                 user.DeletedBy = _tokenHelper.GetUserIdFromContext();
                 user.DeletedOn = DateTime.UtcNow;
 

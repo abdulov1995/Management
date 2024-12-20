@@ -13,6 +13,8 @@ namespace Management.Users.Model
         public bool IsDeleted { get; set; } = false;
         public int RoleId { get; set; }
 
-        public Role Role { get; set; }
+       // public Role Role { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; }
+
     }
 }

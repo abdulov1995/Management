@@ -21,7 +21,6 @@ namespace Management.Users
         }
 
         [HttpGet]
-        [HttpGet]
         public async Task<ActionResult<List<UserDto>>> GetAllAsync()
         {
             var users = await _userService.GetAllAsync();

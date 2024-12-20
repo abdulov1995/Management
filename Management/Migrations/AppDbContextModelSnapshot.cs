@@ -64,7 +64,7 @@ namespace Management.Migrations
                         {
                             Id = 1,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 17, 11, 33, 16, 786, DateTimeKind.Utc).AddTicks(3945),
+                            CreatedOn = new DateTime(2024, 12, 20, 12, 30, 53, 624, DateTimeKind.Utc).AddTicks(5157),
                             IsDeleted = false,
                             Name = "Admin"
                         },
@@ -72,9 +72,51 @@ namespace Management.Migrations
                         {
                             Id = 2,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 17, 11, 33, 16, 786, DateTimeKind.Utc).AddTicks(3953),
+                            CreatedOn = new DateTime(2024, 12, 20, 12, 30, 53, 624, DateTimeKind.Utc).AddTicks(5163),
                             IsDeleted = false,
                             Name = "User"
+                        });
+                });
+
+            modelBuilder.Entity("Management.Roles.Model.UserRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDeleted = false,
+                            RoleId = 1,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsDeleted = false,
+                            RoleId = 2,
+                            UserId = 1
                         });
                 });
 
@@ -134,8 +176,6 @@ namespace Management.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("Users");
 
                     b.HasData(
@@ -144,7 +184,7 @@ namespace Management.Migrations
                             Id = 1,
                             Age = 29,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 17, 11, 33, 16, 786, DateTimeKind.Utc).AddTicks(4564),
+                            CreatedOn = new DateTime(2024, 12, 20, 12, 30, 53, 624, DateTimeKind.Utc).AddTicks(6416),
                             Email = "kamal@mail.ru",
                             FirstName = "Kamal",
                             IsDeleted = false,
@@ -152,25 +192,38 @@ namespace Management.Migrations
                             Password = "A0931047E9DA549847FC8EAADD89FE16",
                             RoleId = 1,
                             UpdatedBy = "1",
-                            UpdatedOn = new DateTime(2024, 12, 17, 11, 33, 16, 786, DateTimeKind.Utc).AddTicks(4565),
+                            UpdatedOn = new DateTime(2024, 12, 20, 12, 30, 53, 624, DateTimeKind.Utc).AddTicks(6420),
                             UserName = "neo"
                         });
                 });
 
-            modelBuilder.Entity("Management.Users.Model.User", b =>
+            modelBuilder.Entity("Management.Roles.Model.UserRole", b =>
                 {
                     b.HasOne("Management.Roles.Model.Role", "Role")
-                        .WithMany("Users")
+                        .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Management.Users.Model.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Management.Roles.Model.Role", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Management.Users.Model.User", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

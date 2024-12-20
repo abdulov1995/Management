@@ -27,13 +27,27 @@ namespace Management.Extentions.TokenHelper
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+            var roles = user.UserRoles
+                    .Where(ur => !ur.IsDeleted && ur.Role.Name == "Admin") 
+                    .Select(ur => ur.Role.Name)
+                    .ToList();
+
+            if (!roles.Any()) 
+            {
+                throw new InvalidOperationException("User does not have the 'Admin' role.");
+            }
+
+            var claims = new List<Claim>
+             {
+                  new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) 
+              };
+
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                        new Claim (ClaimTypes.NameIdentifier,user.Id.ToString()),
-                        new Claim(ClaimTypes.Role, user.Role.Name)
-                    }),
+                Subject = new ClaimsIdentity(claims), 
+
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
                 Expires = DateTime.UtcNow.AddDays(120),

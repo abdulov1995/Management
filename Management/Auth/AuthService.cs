@@ -57,8 +57,9 @@ namespace Management.Auth
 
         public async Task<User> SignIn(SignInRequestDto signInRequest)
         {
-            var user = await _context.Users.Include(u => u.Role)
-                .FirstOrDefaultAsync(u => u.Email == signInRequest.Email || u.UserName == signInRequest.UserName);
+            var user = await _context.Users.Include(u => u.UserRoles)
+                 .ThenInclude(ur => ur.Role)
+                 .FirstOrDefaultAsync(u => u.Email == signInRequest.Email || u.UserName == signInRequest.UserName);
 
             if (user == null)
             {
