@@ -19,7 +19,7 @@ namespace Management.Users
             CreateMap<SignUpRequestDto, User>();
             CreateMap<SignInRequestDto, User>();
             CreateMap<User, UserDetailDto>()
-                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.UserRoles.Select(x => x.Role)));
+                .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.UserRoles.Select(x => x.Role).ToList()));
         }
     }
 

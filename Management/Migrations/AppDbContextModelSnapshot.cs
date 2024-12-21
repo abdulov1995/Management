@@ -64,7 +64,7 @@ namespace Management.Migrations
                         {
                             Id = 1,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 20, 12, 30, 53, 624, DateTimeKind.Utc).AddTicks(5157),
+                            CreatedOn = new DateTime(2024, 12, 21, 9, 38, 25, 16, DateTimeKind.Utc).AddTicks(2557),
                             IsDeleted = false,
                             Name = "Admin"
                         },
@@ -72,7 +72,7 @@ namespace Management.Migrations
                         {
                             Id = 2,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 20, 12, 30, 53, 624, DateTimeKind.Utc).AddTicks(5163),
+                            CreatedOn = new DateTime(2024, 12, 21, 9, 38, 25, 16, DateTimeKind.Utc).AddTicks(2562),
                             IsDeleted = false,
                             Name = "User"
                         });
@@ -184,7 +184,7 @@ namespace Management.Migrations
                             Id = 1,
                             Age = 29,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 20, 12, 30, 53, 624, DateTimeKind.Utc).AddTicks(6416),
+                            CreatedOn = new DateTime(2024, 12, 21, 9, 38, 25, 16, DateTimeKind.Utc).AddTicks(3208),
                             Email = "kamal@mail.ru",
                             FirstName = "Kamal",
                             IsDeleted = false,
@@ -192,7 +192,7 @@ namespace Management.Migrations
                             Password = "A0931047E9DA549847FC8EAADD89FE16",
                             RoleId = 1,
                             UpdatedBy = "1",
-                            UpdatedOn = new DateTime(2024, 12, 20, 12, 30, 53, 624, DateTimeKind.Utc).AddTicks(6420),
+                            UpdatedOn = new DateTime(2024, 12, 21, 9, 38, 25, 16, DateTimeKind.Utc).AddTicks(3209),
                             UserName = "neo"
                         });
                 });
