@@ -12,7 +12,7 @@ using StudentWebApi;
 namespace Management.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241221093825_mig1")]
+    [Migration("20241225093423_mig1")]
     partial class mig1
     {
         /// <inheritdoc />
@@ -67,7 +67,7 @@ namespace Management.Migrations
                         {
                             Id = 1,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 21, 9, 38, 25, 16, DateTimeKind.Utc).AddTicks(2557),
+                            CreatedOn = new DateTime(2024, 12, 25, 9, 34, 23, 283, DateTimeKind.Utc).AddTicks(1158),
                             IsDeleted = false,
                             Name = "Admin"
                         },
@@ -75,7 +75,7 @@ namespace Management.Migrations
                         {
                             Id = 2,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 21, 9, 38, 25, 16, DateTimeKind.Utc).AddTicks(2562),
+                            CreatedOn = new DateTime(2024, 12, 25, 9, 34, 23, 283, DateTimeKind.Utc).AddTicks(1162),
                             IsDeleted = false,
                             Name = "User"
                         });
@@ -187,7 +187,7 @@ namespace Management.Migrations
                             Id = 1,
                             Age = 29,
                             CreatedBy = "1",
-                            CreatedOn = new DateTime(2024, 12, 21, 9, 38, 25, 16, DateTimeKind.Utc).AddTicks(3208),
+                            CreatedOn = new DateTime(2024, 12, 25, 9, 34, 23, 283, DateTimeKind.Utc).AddTicks(1706),
                             Email = "kamal@mail.ru",
                             FirstName = "Kamal",
                             IsDeleted = false,
@@ -195,7 +195,7 @@ namespace Management.Migrations
                             Password = "A0931047E9DA549847FC8EAADD89FE16",
                             RoleId = 1,
                             UpdatedBy = "1",
-                            UpdatedOn = new DateTime(2024, 12, 21, 9, 38, 25, 16, DateTimeKind.Utc).AddTicks(3209),
+                            UpdatedOn = new DateTime(2024, 12, 25, 9, 34, 23, 283, DateTimeKind.Utc).AddTicks(1707),
                             UserName = "neo"
                         });
                 });

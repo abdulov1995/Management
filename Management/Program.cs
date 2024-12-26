@@ -5,6 +5,7 @@ using Management.Auth;
 using Management.Auth.Dto;
 using Management.Auth.Validators;
 using Management.Extentions.TokenHelper;
+using Management.PgSqlFunction;
 using Management.Roles;
 using Management.Roles.Dto;
 using Management.Users;
@@ -20,9 +21,6 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-//builder.Services.AddControllers().AddFluentValidation();
-//builder.Services.AddTransient<IValidator<SignUpRequestDto>, SignUpRequestValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -58,6 +56,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped< FunctionService>();
 builder.Services.AddAutoMapper(typeof(UserMapper).Assembly);
 builder.Services.AddAutoMapper(typeof(RoleMapper).Assembly);
 builder.Services.AddControllers().AddFluentValidation(fv =>

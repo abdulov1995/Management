@@ -18,14 +18,12 @@ namespace Management.Auth
         private readonly IUserService _userService;
         private readonly TokenHelper _tokenHelper;
 
-
         public AuthService(AppDbContext context, IMapper mapper, IUserService userService, TokenHelper tokenHelper)
         {
             _context = context;
             _mapper = mapper;
             _userService = userService;
             _tokenHelper = tokenHelper;
-
         }
         public async Task<User> SignUp(SignUpRequestDto signUpRequest)
         {
@@ -51,7 +49,6 @@ namespace Management.Auth
                 Age = signUpRequest.Age,
                 RoleId = 2
             };
-
             return await _userService.CreateAsync(newUser);
         }
 
